@@ -14,6 +14,8 @@ logo="
 "
 
 # System information fetching
+current_time=$(date '+%Y-%m-%d %H:%M:%S')
+network_stats=$(ifstat -i eth0 1 1 | tail -n 1)
 hostname=$(hostname)
 os_name=$(lsb_release -d | cut -f2)
 kernel=$(uname -r)
@@ -23,6 +25,7 @@ cpu_cores=$(lscpu | grep '^CPU(s):' | cut -d: -f2 | sed 's/^ *//g')
 cpu_threads=$(lscpu | grep '^Thread(s) per core:' | cut -d: -f2 | sed 's/^ *//g')
 ram=$(free -h | grep Mem | awk '{print $2}')
 disk=$(df -h | grep '^/dev' | awk '{print $1 ": " $3 " used, " $2 " total"}' | head -n 1)
+
 
 # Get the host device name more explicitly
 host_device=$(sudo dmidecode -s system-manufacturer)
@@ -80,6 +83,7 @@ echo -e "\033[1;36mSystem Information:\033[0m"
 echo "----------------------------------"
 
 # Display Host Device Information
+echo -e "\033[1;33mCurrent Time:\033[0m \033[1;37m$current_time\033[0m"
 echo -e "\033[1;33mHost Device:\033[0m \033[1;37m$full_device_name\033[0m"
 
 # Display System Information with better formatting and brighter colors
@@ -95,6 +99,7 @@ echo -e "\033[1;33mCPU Threads:\033[0m \033[1;37m$cpu_threads\033[0m"
 
 echo -e "\033[1;33mRAM:\033[0m \033[1;37m$ram\033[0m"
 echo -e "\033[1;33mDisk:\033[0m \033[1;37m$disk\033[0m"
+echo -e "\033[1;33mNetwork (eth0):\033[0m \033[1;37m$network_stats\033[0m"
 echo "----------------------------------"
 
 # Display Coreboot and GRUB information with colored status
